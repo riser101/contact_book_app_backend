@@ -21,11 +21,10 @@ def login():
 @app.route('/api/create', methods=['POST'])
 @login_required
 def insert_contact():
-	contact_details = ContactDetail( user_id=current_user.id, 
-				   					 contact_number=request.form['contact_number'],
-				   					 name=request.form['name'],
-				   					 email=request.form['email']
-				 				   )
+	contact_details = ContactDetail(contact_number=request.form['contact_number'],
+									user_id=current_user.id, 
+									name=request.form['name'], 
+									email=request.form['email'])
 	try:
 		db.session.add(contact_details)
 		db.session.commit()

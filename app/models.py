@@ -22,9 +22,7 @@ class User(UserMixin, db.Model):
 
 	def verify_password(self, password):
 		return check_password_hash(self.password_hash, password)
-	# def __repr__(self):
-	# 	return '<User: {}>'.format(self.email)
-
+	
 @login_manager.user_loader
 def load_user(user_id):
 	return User.query.get(int(user_id))	
@@ -39,9 +37,6 @@ class ContactDetail(db.Model):
 	name = db.Column(db.String(128))
 	contact_number = db.Column(db.String(20))
 	email = db.Column(db.String(128), unique=True)
-
-	# def __repr__(self):
-	# 	return '<Contact_details: {}>'.format(self.)
 
 class ContactDetailSchema(ma.Schema):
 	class Meta:
