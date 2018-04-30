@@ -1,6 +1,6 @@
 
 **Python v2.7** 
-## The app is hosted at http://contactapp.pythonanywhere.com/
+### The app is hosted at http://contactapp.pythonanywhere.com/, feel free to take it out on a ride on this base path.
 
 Please use an API interaction tool like postman to communicate with the APIs. All endpoints are protected except the user registration and login endpoints.
 
@@ -133,3 +133,7 @@ Sample Response:
 	    "status": "ok"
 	}
 					    
+## Test Coverage
+<br>
+
+![Alt text](test_coverage_snap.png?raw=true "Test Coverage Report")
