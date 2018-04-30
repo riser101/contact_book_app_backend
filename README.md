@@ -4,9 +4,9 @@
 
 Please use an API interaction tool like postman to communicate with the APIs. All endpoints are protected except the user registration and login endpoints.
 
-#APIs
+# APIs
 
-#####Note: All request parameters are sent as form data unless stated otherwise.
+##### Note: All request parameters are sent as form data unless stated otherwise.
 
 ## /register
 This route registers a new user for the contact application. Reminder, please post with **form data**.
