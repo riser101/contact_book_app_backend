@@ -1,6 +1,8 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login_manager, ma
+from sqlalchemy import func
+
 
 class User(UserMixin, db.Model):
 	"""
@@ -37,6 +39,8 @@ class ContactDetail(db.Model):
 	name = db.Column(db.String(128))
 	contact_number = db.Column(db.String(20))
 	email = db.Column(db.String(128), unique=True)
+	created_timestamp = db.Column(db.DateTime, default=func.current_timestamp())
+	last_modified_timestamp = db.Column(db.DateTime)
 
 class ContactDetailSchema(ma.Schema):
 	class Meta:
@@ -46,4 +50,4 @@ class ContactDetailSchema(ma.Schema):
         'collection': ma.URLFor('users')
     })
 contact_detail_schema = ContactDetailSchema()
-contact_details_schema = ContactDetailSchema(many=True)		
+contact_details_schema = ContactDetailSchema(many=True)			
