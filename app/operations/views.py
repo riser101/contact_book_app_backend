@@ -143,3 +143,11 @@ def search_contact():
 	resp = jsonify({'status':'failed', 'msg':'name or email or both must be provided', 'result':False})
 	resp.status_code = 400
 	return resp		
+
+
+# route home
+@operations.route('/', methods=['GET'])
+def display_message():
+	return "You're accessing a set of APIs built for a contacts app. <br><br> \
+		All routes are protected, please read this readme to consume the endpoints \
+		: https://github.com/Riser101/contact_book_app_backend/blob/master/README.md"
