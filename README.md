@@ -97,8 +97,8 @@ Sample Response:
 	    "status": "ok"
 	}
 
-### /search
-This route supports three modes of searches and takes **input parameters as part of url**.
+## /search
+This route supports three modes of searches, and takes **input parameters as part of url**. Following are the three modes:
 
 1. Contact can be searched by only name
 2. Contact can be searched by only email
@@ -111,6 +111,12 @@ Sample request urls for search:
 1. http://contactapp.pythonanywhere.com/search?name=chandler
 2. http://contactapp.pythonanywhere.com/search?email=bing@gmail.com
 3. http://contactapp.pythonanywhere.com/search?name=chandler&email=bing@gmail.com
+
+The endpoint is **paginated** and defaults to **10 contacts per request**.
+
+Sample request url for paginated request:
+	
+	http://contactapp.pythonanywhere.com/search?email=bing@gmail.com&page=1&per_page=5
 
 Sample Response:		
     

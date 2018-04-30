@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from . import operations
 from .. import db
 from ..models import ContactDetail, ContactDetailSchema, contact_details_schema
-from sqlalchemy import func
+from sqlalchemy import func, exc
 
 # route to create a new contact
 @operations.route('/create', methods=['POST'])
@@ -37,8 +37,7 @@ def insert_contact():
 		resp = jsonify({'status':'ok', 'msg':'contact created'})
 		resp.status_code = 200
 		return resp
-	## todo : catch specific exception
-	except:
+	except exc.IntegrityError:
 		resp = jsonify({'status':'failed', 'msg':'Email already exists'})
 		resp.status_code = 409
 		return resp
@@ -74,7 +73,7 @@ def edit_contact():
 		resp = jsonify({'status':'ok', 'msg':'updated successfully'})
 		resp.status_code = 200
 		return resp
-	except:
+	except exc.IntegrityError:
 		resp = jsonify({'status':'failed', 'msg':'Updated email address already exists'})
 		resp.status_code = 409
 		return resp
@@ -149,5 +148,12 @@ def search_contact():
 @operations.route('/', methods=['GET'])
 def display_message():
 	return "You're accessing a set of APIs built for a contacts app. <br><br> \
-		All routes are protected, please read this readme to consume the endpoints \
-		: https://github.com/Riser101/contact_book_app_backend/blob/master/README.md"
+		All routes are protected, please read <a \
+		href='https://github.com/Riser101/contact_book_app_backend/blob/master/README.md'>this readme</a> \
+		to consume the endpoints."
+
+
+
+
+
+

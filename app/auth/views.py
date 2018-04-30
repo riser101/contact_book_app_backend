@@ -3,6 +3,7 @@ from flask_login import login_required, login_user, logout_user
 from . import auth
 from .. import db
 from ..models import User
+from sqlalchemy import func, exc
 
 @auth.route('/register', methods=['POST'])
 def register():
@@ -22,11 +23,12 @@ def register():
 
     username = str(request.form.get('username'))
     password = str(request.form.get('password'))
-    user = User(username=username, password=password)
+    user = User(username=username, password=password, created_timestamp=func.current_timestamp(),
+        last_modified_timestamp = func.current_timestamp())
     db.session.add(user)
     try:
     	db.session.commit()
-    except:
+    except exc.IntegrityError: 
 		resp = jsonify({'status':'failed', 'msg':'username already exists'})
 		resp.status_code = 400
 		return resp    		

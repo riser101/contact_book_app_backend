@@ -13,6 +13,8 @@ class User(UserMixin, db.Model):
 	id = db.Column(db.BigInteger, primary_key=True)
 	username = db.Column(db.String(60), unique=True)
 	password_hash = db.Column(db.String(128))
+	created_timestamp = db.Column(db.DateTime, default=func.current_timestamp())
+	last_modified_timestamp = db.Column(db.DateTime)
 
 	@property
 	def password(self):
@@ -44,7 +46,7 @@ class ContactDetail(db.Model):
 
 class ContactDetailSchema(ma.Schema):
 	class Meta:
-		fields = ('name', 'contact_number', 'email')		
+		fields = ('id', 'name', 'contact_number', 'email')		
 		_links = ma.Hyperlinks({
         'self': ma.URLFor('user_detail', id='<id>'),
         'collection': ma.URLFor('users')

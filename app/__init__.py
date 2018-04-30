@@ -13,8 +13,8 @@ ma = Marshmallow()
 
 def create_app(config_name):
     if(os.getenv('FLASK_CONFIG')=='production') :
-        app = Flask(__name__)
-        app.config.update(
+        app = Flask(__name__)  # pragma: no cover 
+        app.config.update(  # pragma: no cover 
             SECRET_KEY=os.getenv('SECRET_KEY'),
             SQLALCHEMY_DATABASE_URI=os.getenv('SQLALCHEMY_DATABASE_URI')
         )
