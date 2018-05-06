@@ -62,12 +62,9 @@ class TestModels(TestBase):
 		self.assertEqual(User.query.count(), 2)
 	
 	def test_contact_detail_model(self):
-		contact_details = ContactDetail( contact_number=9887889099,
-									 user_id=12, 
-									 name='test_contact_2', 
-									 email='test2@gmail.com',
-									 created_timestamp = func.current_timestamp(),
-									 last_modified_timestamp = func.current_timestamp()
+		contact_details = ContactDetail( contact_number=9887889099, user_id=12, name='test_contact_2',
+			email='test2@gmail.com', created_timestamp = func.current_timestamp(),
+			last_modified_timestamp = func.current_timestamp()
 									)
 		db.session.add(contact_details)
 		db.session.commit()

@@ -4,6 +4,7 @@ from . import operations
 from .. import db
 from ..models import ContactDetail, ContactDetailSchema, contact_details_schema
 from sqlalchemy import func, exc
+from .. import val
 
 # route to create a new contact
 @operations.route('/create', methods=['POST'])
@@ -19,18 +20,19 @@ def insert_contact():
 		resp.status_code = 400
 		return resp
 
+	if validate_email(request.form.get('email')) == False:
+		resp = jsonify({'status':'failed', 'msg':'invalid email'})
+		resp.status_code = 400
+		return resp			
+
 	if request.form.get('contact_number') == None:
 		resp = jsonify({'status':'failed', 'msg':'must supply contact_number'})
 		resp.status_code = 400
-		return resp
+		return resp	
 
-	contact_details = ContactDetail( contact_number=request.form['contact_number'],
-									 user_id=current_user.id, 
-									 name=request.form['name'], 
-									 email=request.form['email'],
-									 created_timestamp = func.current_timestamp(),
-									 last_modified_timestamp = func.current_timestamp()
-									)
+	contact_details = ContactDetail(contact_number=request.form['contact_number'],user_id=current_user.id, 
+		name=request.form['name'], email=request.form['email'], created_timestamp = func.current_timestamp(),
+		last_modified_timestamp = func.current_timestamp())
 	try:
 		db.session.add(contact_details)
 		db.session.commit()
