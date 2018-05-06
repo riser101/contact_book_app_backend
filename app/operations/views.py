@@ -179,8 +179,8 @@ def display_message():
     serves a temporary pupose of home
     """		
 	return "You're accessing a set of APIs built for a contacts app. <br><br> \
-		All routes are protected, please read <a href='https://github.com/ \
-		Riser101/contact_book_app_backend/blob/master/README.md'>this readme</a> \
+		All routes are protected, please read <a href='https://github.com/Riser101\
+		/contact_book_app_backend/blob/master/README.md'>this readme</a> \
 		to consume the endpoints." # pragma: no cover
 
 
