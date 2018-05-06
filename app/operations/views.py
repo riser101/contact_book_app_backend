@@ -15,17 +15,17 @@ def insert_contact():
     Handle requests to the /create route
     Adds a contact to logged-in users app
     """	
-	if request.form.get('name') == None:
+	if not request.form.get('name'):
 		resp = jsonify({'status':'failed', 'msg':'must supply name'})
 		resp.status_code = 400
 		return resp
 	
-	if request.form.get('email') == None:
+	if not request.form.get('email'):
 		resp = jsonify({'status':'failed', 'msg':'must supply email'})
 		resp.status_code = 400
 		return resp
 
-	if request.form.get('contact_number') == None:
+	if not request.form.get('contact_number'):
 		resp = jsonify({'status':'failed', 'msg':'must supply contact_number'})
 		resp.status_code = 400
 		return resp	
@@ -63,19 +63,19 @@ def edit_contact():
     Handle requests to the /edit route
     Edits a contact for an logged-in user
     """		
-	if request.form.get('contact_id') == None:
+	if not request.form.get('contact_id'):
 		resp = jsonify({'status':'failed', 'msg':'must supply contact_id'})
 		resp.status_code = 400
 		return resp
-	if request.form.get('name') == None:
+	if not request.form.get('name'):
 		resp = jsonify({'status':'failed', 'msg':'must supply name'})
 		resp.status_code = 400
 		return resp		
-	if request.form.get('contact_number') == None:
+	if not request.form.get('contact_number'):
 		resp = jsonify({'status':'failed', 'msg':'must supply contact_number'})
 		resp.status_code = 400
 		return resp		
-	if request.form.get('email') == None:
+	if not request.form.get('email'):
 		resp = jsonify({'status':'failed', 'msg':'must supply email'})
 		resp.status_code = 400
 		return resp		
@@ -104,7 +104,7 @@ def delete_contact():
     Handle requests to the /delete route
     deletes a contact for logged-in users app
     """		
-	if request.form.get('contact_id') == None:
+	if not request.form.get('contact_id'):
 		resp = jsonify({'status':'failed', 'msg':'must supply contact_id'})
 		resp.status_code = 400
 		return resp		
@@ -180,9 +180,4 @@ def display_message():
     """		
 	return "You're accessing a set of APIs built for a contacts app. <br><br> All routes are protected, please read \
 		<a href='https://github.com/Riser101/contact_book_app_backend/blob/master/README.md'> this readme </a> to consume the endpoints." # pragma: no cover
-
-
-
-
-
 

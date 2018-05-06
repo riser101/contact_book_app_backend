@@ -13,12 +13,12 @@ def register():
     Handle requests to the /register route
     Add an user to the database through the registration api
     """	
-    if request.form.get('username') == None:
+    if not request.form.get('username'):
     	resp = jsonify({'status':'failed', 'msg':'must supply username'})
     	resp.status_code = 400
     	return resp
 
-    if request.form.get('password') == None:
+    if not request.form.get('password'):
     	resp = jsonify({'status':'failed', 'msg':'must supply password'})
     	resp.status_code = 400
     	return resp
@@ -46,12 +46,12 @@ def login():
     Handle requests to the /login route
     logs-in a user to the app
     """ 
-    if request.form.get('username') == None:
+    if not request.form.get('username'):
         resp = jsonify({'status':'failed', 'msg':'must supply username'})
         resp.status_code = 400
         return resp
 
-    if request.form.get('password') == None:
+    if not request.form.get('password'):
         resp = jsonify({'status':'failed', 'msg':'must supply password'})
         resp.status_code = 400
         return resp
