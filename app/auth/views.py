@@ -4,7 +4,9 @@ from . import auth
 from .. import db
 from ..models import User
 from sqlalchemy import func, exc
+from email_validator import validate_email, EmailNotValidError
 
+# route to register a user into the application
 @auth.route('/register', methods=['POST'])
 def register():
     """
@@ -28,10 +30,11 @@ def register():
     db.session.add(user)
     try:
     	db.session.commit()
-    except exc.IntegrityError: 
-		resp = jsonify({'status':'failed', 'msg':'username already exists'})
-		resp.status_code = 400
-		return resp    		
+    except exc.IntegrityError:
+        db.session().rollback()
+        resp = jsonify({'status':'failed', 'msg':'username already exists'})
+        resp.status_code = 400
+        return resp    		
     resp = jsonify({'status':'ok', 'msg':'user created successfully'})
     resp.status_code = 200
     return resp         

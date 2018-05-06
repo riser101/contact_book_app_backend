@@ -1,17 +1,19 @@
 
 **Python v2.7** 
-### The app is hosted at http://contactapp.pythonanywhere.com/, feel free to take it out on a ride on this base path.
+### The app is hosted at http://contactapp.pythonanywhere.com/, feel free to take it out for a ride on this base path.
 
 Please use an API interaction tool like postman to communicate with the APIs. All endpoints are protected except the user registration and login endpoints.
 
 # APIs
 
-Note: All request parameters are sent as form data unless stated otherwise.
+**Note: All request parameters are to be sent as form data unless otherwise  stated.**
 
 ## /register
-This route registers a new user for the contact application. Reminder, please post with **form data**.
+This route registers a new user for the contact application. Reminder, please post with **form data**. usernames are unique.
 
 **Method : Post**
+
+
 
 Sample Request:
 
@@ -45,9 +47,12 @@ Sample Response:
 	}
 	
 ## /create
-This route creates a new contact.
+This route creates a new contact. email and contact_number are unique.
 
 **Method : Post**
+
+contact number format : <_country_-code><_valid-contact-number_>
+
 
 Sample Request:
 	
@@ -62,7 +67,7 @@ Sample Response:
     	"status": "ok"
 	}
 ## /edit
-This route edits an existing contact 
+This route edits an existing contact. 
 
 **Method:PUT**
 
@@ -98,21 +103,22 @@ Sample Response:
 	}
 
 ## /search
-This route supports three modes of searches, and takes **input parameters as part of url**. Following are the three modes:
-
-1. Contact can be searched by only name
-2. Contact can be searched by only email
-3. Contact can be searched by both, name and email
-
 **Method:GET**
 
-Sample request urls for search:
+This route supports three modes of searches, and takes **input parameters as part of url**. Following are the three modes:
 
-1. http://contactapp.pythonanywhere.com/search?name=chandler
-2. http://contactapp.pythonanywhere.com/search?email=bing@gmail.com
-3. http://contactapp.pythonanywhere.com/search?name=chandler&email=bing@gmail.com
+1. Contact can be searched by only name : 
+		
+		http://contactapp.pythonanywhere.com/search?name=chandler
+2. Contact can be searched by only email : 
+	
+		http://contactapp.pythonanywhere.com/search?email=bing@gmail.com
+3. Contact can be searched by both, name and email : 
 
-The endpoint is **paginated** and defaults to **10 contacts per request**.
+		http://contactapp.pythonanywhere.com/search?name=chandler&email=bing@gmail.com
+
+
+The endpoint is **paginated** and if per_page parameter is not provided, defaults to **10 contacts per request**.
 
 Sample request url for paginated request:
 	
@@ -125,7 +131,7 @@ Sample Response:
 	    "result": [
 	        {
 	            "id":234,
-	            "contact_number": "1887667877",
+	            "contact_number": "+919881880422",
 	            "email": "bing@gmail.com",
 	            "name": "chandler",
 	        }

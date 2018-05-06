@@ -4,12 +4,17 @@ from . import operations
 from .. import db
 from ..models import ContactDetail, ContactDetailSchema, contact_details_schema
 from sqlalchemy import func, exc
-from .. import val
+from email_validator import validate_email, EmailNotValidError
+import phonenumbers
 
 # route to create a new contact
 @operations.route('/create', methods=['POST'])
 @login_required
 def insert_contact():
+	"""
+    Handle requests to the /create route
+    Adds a contact to logged-in users app
+    """	
 	if request.form.get('name') == None:
 		resp = jsonify({'status':'failed', 'msg':'must supply name'})
 		resp.status_code = 400
@@ -20,27 +25,33 @@ def insert_contact():
 		resp.status_code = 400
 		return resp
 
-	if validate_email(request.form.get('email')) == False:
-		resp = jsonify({'status':'failed', 'msg':'invalid email'})
-		resp.status_code = 400
-		return resp			
-
 	if request.form.get('contact_number') == None:
 		resp = jsonify({'status':'failed', 'msg':'must supply contact_number'})
 		resp.status_code = 400
 		return resp	
-
-	contact_details = ContactDetail(contact_number=request.form['contact_number'],user_id=current_user.id, 
-		name=request.form['name'], email=request.form['email'], created_timestamp = func.current_timestamp(),
-		last_modified_timestamp = func.current_timestamp())
+	
 	try:
+		validate_email(request.form.get('email'), check_deliverability=False)	
+		parsed_num = phonenumbers.parse(request.form.get('contact_number'))
+		if phonenumbers.is_valid_number(parsed_num) == False:
+			resp = jsonify({'status':'failed', 'msg':'invalid contact number'})
+			resp.status_code = 400
+			return resp				
+		contact_details = ContactDetail(contact_number=request.form['contact_number'],
+			user_id=current_user.id, name=request.form['name'],email=request.form['email'], 
+			created_timestamp = func.current_timestamp(),last_modified_timestamp = func.current_timestamp())		
 		db.session.add(contact_details)
 		db.session.commit()
 		resp = jsonify({'status':'ok', 'msg':'contact created'})
 		resp.status_code = 200
-		return resp
+		return resp		
+	except(EmailNotValidError, phonenumbers.phonenumberutil.NumberParseException) as e:
+		resp = jsonify({'status':'failed', 'msg':str(e)})
+		resp.status_code = 400
+		return resp					
 	except exc.IntegrityError:
-		resp = jsonify({'status':'failed', 'msg':'Email already exists'})
+		db.session().rollback()
+		resp = jsonify({'status':'failed', 'msg':'Email or contact number already exists'})
 		resp.status_code = 409
 		return resp
 
@@ -48,6 +59,10 @@ def insert_contact():
 @operations.route('/edit', methods=['PUT'])
 @login_required
 def edit_contact():
+	"""
+    Handle requests to the /edit route
+    Edits a contact for an logged-in user
+    """		
 	if request.form.get('contact_id') == None:
 		resp = jsonify({'status':'failed', 'msg':'must supply contact_id'})
 		resp.status_code = 400
@@ -76,7 +91,8 @@ def edit_contact():
 		resp.status_code = 200
 		return resp
 	except exc.IntegrityError:
-		resp = jsonify({'status':'failed', 'msg':'Updated email address already exists'})
+		db.session().rollback()
+		resp = jsonify({'status':'failed', 'msg':'Updated email address or contact number already exists'})
 		resp.status_code = 409
 		return resp
 
@@ -84,6 +100,10 @@ def edit_contact():
 @operations.route('/delete', methods=['DELETE'])
 @login_required
 def delete_contact():
+	"""
+    Handle requests to the /delete route
+    deletes a contact for logged-in users app
+    """		
 	if request.form.get('contact_id') == None:
 		resp = jsonify({'status':'failed', 'msg':'must supply contact_id'})
 		resp.status_code = 400
@@ -99,6 +119,11 @@ def delete_contact():
 @operations.route('/search', methods=['GET'])
 @login_required
 def search_contact():
+	"""
+    Handle requests to the /search route
+    Searches a contact either based on only name, or only email,
+    or both name and email
+    """	
 	per_page = 10 if request.args.get('per_page') == None else int(request.args.get('per_page'))
 	page = 1 if request.args.get('page') == None else int(request.args.get('page'))
 	
@@ -149,10 +174,14 @@ def search_contact():
 # route home
 @operations.route('/', methods=['GET'])
 def display_message():
+	"""
+    Handle requests to the / route
+    serves a temporary pupose of home
+    """		
 	return "You're accessing a set of APIs built for a contacts app. <br><br> \
-		All routes are protected, please read <a \
-		href='https://github.com/Riser101/contact_book_app_backend/blob/master/README.md'>this readme</a> \
-		to consume the endpoints."
+		All routes are protected, please read <a href='https://github.com/ \
+		Riser101/contact_book_app_backend/blob/master/README.md'>this readme</a> \
+		to consume the endpoints." # pragma: no cover
 
 
 

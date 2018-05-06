@@ -8,7 +8,6 @@ class User(UserMixin, db.Model):
 	"""
 	Creates a users table
 	"""
-
 	__tablename__ = 'users'
 	id = db.Column(db.BigInteger, primary_key=True)
 	username = db.Column(db.String(60), unique=True)
@@ -39,12 +38,15 @@ class ContactDetail(db.Model):
 	id = db.Column(db.BigInteger, primary_key=True)
 	user_id = db.Column(db.BigInteger)
 	name = db.Column(db.String(128))
-	contact_number = db.Column(db.String(20))
+	contact_number = db.Column(db.String(20), unique=True)
 	email = db.Column(db.String(128), unique=True)
 	created_timestamp = db.Column(db.DateTime, default=func.current_timestamp())
 	last_modified_timestamp = db.Column(db.DateTime)
 
 class ContactDetailSchema(ma.Schema):
+	"""
+    defines schema for marshallow output
+    """	
 	class Meta:
 		fields = ('id', 'name', 'contact_number', 'email')		
 		_links = ma.Hyperlinks({
